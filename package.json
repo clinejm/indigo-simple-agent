@@ -1,0 +1,22 @@
+{
+  "name": "todo",
+  "version": "0.1.0",
+  "description": "A basic Javascript agent.",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon -L -i test -i segments -i node_modules",
+    "test": "mocha --recursive --require should"
+  },
+  "author": "jason",
+  "license": "SEE LICENSE IN LICENSE",
+  "dependencies": {
+    "express": "^4.14.0",
+    "stratumn-agent": "^0.15.0"
+  },
+  "devDependencies": {
+    "mocha": "^2.5.3",
+    "nodemon": "^1.9.2",
+    "should": "^10.0.0",
+    "stratumn-mock-agent": "^1.2.0"
+  }
+}
