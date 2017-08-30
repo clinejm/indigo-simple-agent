@@ -21,9 +21,18 @@ nodemon index.js 3004 richard
 
 ## Run multiple front-ends
 
-(I had to modify agent-ui to get this to work)
+First, modify agent-ui/config/environment.js with this change
 
+```
+-      AGENT_PORT: 3000,
++      AGENT_PORT: process.env.AGENT_PORT || 3000
+```
+
+then run from agent-ui directory:
+
+```
 AGENT_PORT=3001 ember serve --port 4201 --live-reload=false
 AGENT_PORT=3002 ember serve --port 4202 --live-reload=false
 AGENT_PORT=3003 ember serve --port 4203 --live-reload=false
 AGENT_PORT=3004 ember serve --port 4204 --live-reload=false
+```
