@@ -1,0 +1,8 @@
+// rsa key values in hex
+module.exports = {
+  rsa_key: {
+    e: "10001",
+    n: '64ff48b4c795f83510bb5e84097ba81352c80436fb61752af0f497762175fcd8cd94972c633874e392b9c34dcb2982f0ed1b2c32a40570f97b75a2689bd19c7d',
+    d: '4bdeba6f93bf454617dba994e6cacde83637ab72e244c4100e12aff53e0db472f7e13ac768a1dc2a468216b18777548a66c81064bfea9d10b2fabe367b6cde1' 
+  }
+}
