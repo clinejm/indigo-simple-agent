@@ -11,13 +11,14 @@
   "license": "SEE LICENSE IN LICENSE",
   "dependencies": {
     "express": "^4.14.0",
-    "stratumn-agent": "^0.15.0",
-    "node-import": "^0.9.2"
+    "node-import": "^0.9.2",
+    "stratumn-agent": "^0.15.0"
   },
   "devDependencies": {
     "mocha": "^2.5.3",
     "nodemon": "^1.9.2",
     "should": "^10.0.0",
+    "stratumn-agent-client": "^1.9.0",
     "stratumn-mock-agent": "^1.2.0"
   }
 }
