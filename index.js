@@ -5,6 +5,7 @@ var crypto = require('crypto');
 var express = require('express');
 var Agent = require('stratumn-agent');
 var plugins = Agent.plugins;
+var signatures = require('./lib/signatures')
 
 // Load actions.
 // Assumes your actions are in ./lib/actions.
@@ -19,11 +20,12 @@ var fossilizerHttpClient = null;
 var agentUrl = process.env.STRATUMN_AGENT_URL || ('http://localhost:'+PORT);
 
 // Create an agent from the actions, the store client, and the fossilizer client.
+// TODO take out actionArgs plugin; atm causes an error (code in agent-ui)
 var agent = Agent.create(actions, storeHttpClient, fossilizerHttpClient, {
   // the agent needs to know its root URL
   agentUrl: agentUrl,
   // plugins you want to use
-  plugins: [plugins.agentUrl(agentUrl), plugins.actionArgs, plugins.stateHash]
+  plugins: [plugins.agentUrl(agentUrl), plugins.actionArgs, plugins.stateHash, plugins.signedState(signatures)]
 });
 
 // Creates an HTTP server for the agent with CORS enabled.
