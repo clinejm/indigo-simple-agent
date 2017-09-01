@@ -4,6 +4,30 @@ Welcome to ZKP Average, our toy application demonstrating a zero knowledge proce
 The protocols assumes everyone gives their honest valuation, and provides a way for everyone to know the average of their valuations, without anyone learning anybody else's valuation
 As we are primarily modifying the agent code, this repo is based on 'stratumn/agent-js'. However, we assume familiarity with [indigo framework](http://indigoframework.com), and can optionally be run with a front-end using `stratumn/agent-ui`.
 
+### The protocol
+
+1. Alice creates 'init' segment with a description of her object and the list of public keys she is interested in hearing from. The public keys are in the following fun format
+
+```
+e1.n1,e2.n2,e3.n3
+```
+
+For our example, if the user `user` was creating the the init segment, the public key string would be
+
+```
+10001.66648706041030b2d58f8560a10e129e1ff5f11e67d481afe58748ecf2c31b68419155a5a2fcc17669b8b941b729f0fb8fa7dbc76c76a9b2d43c93c78526da03,10001.f57b01fa285fb1a649d720a6ed749668b9985e4d0036a3a197632fbb2259e09eb4f660a4032510d5a021235373fc5240e361d8519e718b8a6b3cc9e62d10ff43,10001.64ff48b4c795f83510bb5e84097ba81352c80436fb61752af0f497762175fcd8cd94972c633874e392b9c34dcb2982f0ed1b2c32a40570f97b75a2689bd19c7d
+```
+
+2. Each participant runs `evaluate` when it's their turn to do so. `evaluate` is rejected if
+  a) it's not your turn
+  b) everyone has already evaluated
+  
+3. Each participant then runs `unblind` when it's their turn to do so, in the same order as initially specified by the `init` segment. `unblind` removes the random blinding factor that provided secrecy in the first round
+
+4. Finally, Alice (or `user`) runs `finalize`, which removes her initial blinding factor and publishes the average to the network.
+
+(todo: More details or link to protocol)
+
 ### Getting Started
 
 ```
@@ -147,6 +171,8 @@ AGENT_PORT=3002 ember serve --port 4202 --live-reload=false
 AGENT_PORT=3003 ember serve --port 4203 --live-reload=false
 AGENT_PORT=3004 ember serve --port 4204 --live-reload=false
 ```
+
+Then you can view (and even add if it's your turn) segments at the url associated with your chosen port, `http://localhost:4201`, for example.
 
 
 ## To Remove Old Maps:
