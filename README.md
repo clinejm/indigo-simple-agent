@@ -10,8 +10,41 @@ npm install
 npm install -g nodemon
 ```
 
-Now you can start the agent. `PORT` and  `CONFIG` are both optional.
+## Configure Store
 
+Each agent needs to connect to the same store for this example to work.
+
+If you have already completed the [todo list tutorial](https://indigoframework.com/documentation/v0.0.8-dev/tutorials/part1.html) then you should already have a store running. However you will need to expose the port in your [docker config](https://github.com/stratumn/todo-tutorials/blob/part1/docker-compose.dev.yml#L29) file.
+
+`docker-compose.dev.yml`:
+
+change:
+```
+store:
+  env_file:
+  - ./config/dev.env
+  - ./config/dev.secret.env
+```
+
+to add the port:
+
+```
+store:
+  env_file:
+  - ./config/dev.env
+  - ./config/dev.secret.env
+  ports:
+  - "5000:5000"
+```
+
+the agent will default to `http://localhost:5000` if this is not where you are running your store
+you can provide an environment variable that had the http address of the store:
+`STRATUMN_STORE_URL='http://localhost:5000'`
+
+
+#### Start Agent
+
+Now you can start the agent. `PORT` and  `CONFIG` are both optional.
 
 ```
 nodemon index.js <PORT> <CONFIG>
@@ -35,7 +68,7 @@ module.exports = {
 TODO: instructions to generate new keys
 
 TOOD: we need provide more options for the location of the keys.
-``
+
 
 ## Run Test with Multiple Agents
 
@@ -83,16 +116,29 @@ Action finalize segment hash b453767dfb1611d63cb5a9d83fda6911040818a292c347ffbaa
 Final outcome 14d186e69135cc01f05332ca66132c57fe4d40ab15640c65196c3eaa8c42d4fd 20
 ```
 
-## Run multiple front-ends
 
-First, modify agent-ui/config/environment.js with this change
+### Verify outcome with agent-ui
+
+If you still have your agent-ui running from the todo-tutorial then you can view the segments generated. http://localhost:4000/
+
+Note: Although you will be able to view the segments you will not be able to participate in the process from this agent UI as it is configured to talk to the todo agent.
+
+
+
+## Connnect Agent-UI to these agents
+
+If you would like to add segments via agent UI you will need to setup and run your own copy.
+
+clone the repo from https://github.com/stratumn/agent-ui and follow the setup instructions.
+
+then modify agent-ui/config/environment.js with this change
 
 ```
 -      AGENT_PORT: 3000,
 +      AGENT_PORT: process.env.AGENT_PORT || 3000
 ```
 
-then run from agent-ui directory:
+then run as many agent-uis as you want:
 
 ```
 AGENT_PORT=3001 ember serve --port 4201 --live-reload=false
@@ -103,6 +149,7 @@ AGENT_PORT=3004 ember serve --port 4204 --live-reload=false
 
 
 ## To Remove Old Maps:
+If you need to cleanup your store this is a quick shortcut:
 
 ```
 # stop strat
