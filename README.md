@@ -1,7 +1,8 @@
 ### Introduction
 
-TODO: paragraph that explains the ZKP of Average and why you would want to do such a thing.
-
+Welcome to ZKP Average, our toy application demonstrating a zero knowledge process on Indigo. This protocol provides a way for a Seller (Alice) to gain honest valuations from N friends who have opinions about how much a specific item is worth.
+The protocols assumes everyone gives their honest valuation, and provides a way for everyone to know the average of their valuations, without anyone learning anybody else's valuation
+As we are primarily modifying the agent code, this repo is based on 'stratumn/agent-js'. However, we assume familiarity with [indigo framework](http://indigoframework.com), and can optionally be run with a front-end using `stratumn/agent-ui`.
 
 ### Getting Started
 
