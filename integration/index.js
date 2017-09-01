@@ -40,142 +40,61 @@ var  ankurP = ClientAgent.getAgent('http://localhost:3003');
 var  richardP = ClientAgent.getAgent('http://localhost:3004');
 
 
+
+
+// var test = {
+//
+//   steps: [
+//
+//     {
+//       agent: 'ankur',
+//       method: "evaluate",
+//       args: "20"
+//     }
+//
+//   ]
+//
+//
+// };
+
+
+var agentAction = (agent, action, actionArgs)=> {
+  return (segment) => {
+    console.log("Action", action, "segment hash", segment.meta.linkHash);
+    return agent.getSegment(segment.meta.linkHash).then((segment) => {
+      return segment[action](actionArgs);
+    });
+  }
+}
+
+
 console.log(requestorP, jasonP, ankurP,richardP);
 
 Promise.all([requestorP, jasonP, ankurP,richardP]).then((agents)=>{
+
   var req = agents[0]; //ES6 destructure??
   var jason = agents[1];
   var ankur = agents[2];
   var richard = agents[3];
 
-  console.log(req);
   var mapId = "";
   var initSegId;
-  req.createMap('Test ' + Date.now(), evaluatorString).then((initSegment) =>{
-      mapId = initSegment.link.meta.mapId;
-      initSegId = initSegment.meta.linkHash;
-
-      console.log("map created", mapId);
-      console.log("segment created", initSegId);
+  req.createMap('Test ' + Date.now(), evaluatorString)
+    .then((initSegment) =>{
+      console.log("map id", initSegment.link.meta.mapId);
       return initSegment;
     })
+    .then(agentAction(ankur,"evaluate", 20))
+    .then(agentAction(jason,"evaluate", 20))
+    .then(agentAction(richard,"evaluate", 20))
+    .then(agentAction(ankur,"unblind"))
+    .then(agentAction(jason,"unblind"))
+    .then(agentAction(richard,"unblind"))
+    .then(agentAction(req,"finalize"))
     .then((segment)=>{
-      //Ankurs turn.
-      return ankur.getSegment(segment.meta.linkHash).then((segment) => {
-        return segment.evaluate(20);
-      });
-
-    }).then((segment)=>{
-      //jason turn.
-      console.log("Ankur's segment", segment.meta.linkHash);
-      return jason.getSegment(segment.meta.linkHash).then((segment) => {
-        return segment.evaluate(20);
-      });
-
-    }).then((segment)=>{
-      //Richard turn.
-      console.log("Jason's segment", segment.meta.linkHash);
-      return richard.getSegment(segment.meta.linkHash).then((segment) => {
-        return segment.evaluate(20);
-      });
-
-    }).then((segment)=>{
-      //Ankurs turn.
-      console.log("Richard's segment", segment.meta.linkHash);
-      return ankur.getSegment(segment.meta.linkHash).then((segment) => {
-        return segment.unblind();
-      });
-
-    }).then((segment)=>{
-      //jason turn.
-      console.log("Ankur's segment", segment.meta.linkHash);
-      return jason.getSegment(segment.meta.linkHash).then((segment) => {
-        return segment.unblind();
-      });
-
-    }).then((segment)=>{
-      //Richard turn.
-      console.log("Jason's segment", segment.meta.linkHash);
-      return richard.getSegment(segment.meta.linkHash).then((segment) => {
-        return segment.unblind();
-      });
-
-    }).then((segment)=>{
-      //Richard turn.
-      console.log("Richard's segment", segment.meta.linkHash);
-      return req.getSegment(segment.meta.linkHash).then((segment) => {
-        return segment.finalize();
-      });
-
-    }).then((segment)=>{
-      //Richard turn.
       console.log("Final outcome", segment.meta.linkHash, segment.link.state.average);
-
     })
+    .catch(function(error) {console.log("Error????", error)});
 
 
 }).catch(function(error) {console.log("Error????", error)});
-
-
-// Promise.all(requestorP, jasonP, ankurP,richardP).then(
-//   (req, jason, ankur, richard) => {
-//
-//     console.log("yay?",req, jason, ankur, richard);
-//
-//
-//   }
-// );
-
-
-
-// ClientAgent.getAgent('http://localhost:3001')
-//   .then(function(agent) {
-//     console.log(agent);
-//     // Create a new map, you can pass arguments to init
-//     return agent.getSegment('f30ad909b6228c54bfead8a854c1279afcc2d5cb796dce76999a3fddb37cea05');
-//   })
-//   .then(function(segment) {
-//     // You can call an action like a regular function
-//     console.log("Segment",segment);
-//     return segment.evaluate(20);
-//   })
-//   .then(function(segment) {
-//     // You can call an action like a regular function
-//     console.log("Segment",segment);
-//     return segment.evaluate(20);
-//   })
-//   .then(function(segment) {
-//     // You can call an action like a regular function
-//     console.log("Segment",segment);
-//     return segment.evaluate(20);
-//   })
-//   .then(function(segment) {
-//     // You can call an action like a regular function
-//     console.log("Segment",segment);
-//     return segment.evaluate(20);
-//   })
-//   .then(function(segment) {
-//     // You can call an action like a regular function
-//     console.log("Segment",segment);
-//     return segment.unblind();
-//   }).then(function(segment) {
-//     // You can call an action like a regular function
-//     console.log("Segment",segment);
-//     return segment.unblind();
-//   }).then(function(segment) {
-//     // You can call an action like a regular function
-//     console.log("Segment",segment);
-//     return segment.unblind();
-//   }).then(function(segment) {
-//     // You can call an action like a regular function
-//     console.log("Segment",segment);
-//     return segment.unblind();
-//   }).then(function(segment) {
-//     // You can call an action like a regular function
-//     console.log("Segment",segment);
-//     return segment.finalize();
-//   })
-//   .catch(function(err) {
-//     // Handle errors
-//     console.error("ooops ", err);
-//   });
