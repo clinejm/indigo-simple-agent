@@ -1,7 +1,5 @@
 var ClientAgent = require('stratumn-agent-client');
 
-
-
 var evaluatorKeys = [
   { //Ankur
     e: "10001",
